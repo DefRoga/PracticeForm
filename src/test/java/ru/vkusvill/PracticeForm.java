@@ -53,10 +53,5 @@ public class PracticeForm {
         $x("//div[contains(@class, 'modal-body')]").shouldHave(text("Biba Fedotov"), text("Biba@mail.ru"), text("8800555353"));
 
 
-
-
-        //setTimeout(function() {debugger},4000);
-
-
     }
 }
