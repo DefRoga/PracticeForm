@@ -3,7 +3,8 @@ package pages;
 import com.codeborne.selenide.SelenideElement;
 import pages.components.CalendarComponent;
 
-import static com.codeborne.selenide.Condition.cssValue;
+import static com.codeborne.selenide.Condition.*;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.*;
 
 public class PageObject {
@@ -23,9 +24,8 @@ public class PageObject {
             stateInput =  $x("//div[@id='react-select-3-option-0']"),
             cityClick = $x("//*[contains(@id, 'city')]"),
             cityInput =  $x("//div[@id='react-select-4-option-0']"),
-            submitButton = $x("//button[contains(@id, 'submit')]");
-
-            //Тут дальше будут проверки
+            submitButton = $x("//button[contains(@id, 'submit')]"),
+            tableResult =  $x("//div[contains(@class, 'modal-content')]"); // Таблица с результатами
 
 
     CalendarComponent calendarComponent = new CalendarComponent();
@@ -126,13 +126,28 @@ public class PageObject {
         return this;
     }
 
-    public PageObject validationMatching(String key, String value) {
+    public PageObject checkNegativeResult(String key, String value) {
         firstNameInput.shouldBe(cssValue(key, value));
         lastNameInput.shouldBe(cssValue(key, value));
         userNumber.shouldBe(cssValue(key, value));
         $x("//label[@for='gender-radio-1']").shouldBe(cssValue(key, value));
         $x("//label[@for='gender-radio-2']").shouldBe(cssValue(key, value));
         $x("//label[@for='gender-radio-3']").shouldBe(cssValue(key, value));
+
+        return this;
+    }
+
+    public PageObject checkResultMinData() {
+        tableResult.should(appear)
+        .shouldHave(text("Thanks for submitting the form"))
+        .shouldHave(text("Biba Fedotov"), text("8800555353"));
+
+        return this;
+    }
+
+    public PageObject checkResultSuccessfull(String key, String value) {
+        tableResult.should(appear)
+                .shouldHave(text(value));
 
         return this;
     }

@@ -4,10 +4,6 @@ package tests;
 import org.junit.jupiter.api.Test;
 import pages.PageObject;
 
-import static com.codeborne.selenide.Condition.appear;
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$x;
-import static com.codeborne.selenide.Selenide.open;
 
 public class PracticeFormWithPageObject extends TestBase {
 
@@ -20,7 +16,7 @@ public class PracticeFormWithPageObject extends TestBase {
                 .setLastName("Fedotov")
                 .setEmail("Biba@mail.ru")
                 .setGender()
-                .setUserNumber("88005553535")
+                .setUserNumber("8800555353")
                 .setDateOfBirth("20", "April", "2000")
                 .setSubjects("Maths")
                 .setHobbies()
@@ -29,24 +25,38 @@ public class PracticeFormWithPageObject extends TestBase {
                 .scrollDaunEbaniy()
                 .setState()
                 .setCity()
-                .submit();
+                .submit()
 
-
-        $x("//div[contains(@class, 'modal-dialog modal-lg')]").should(appear);
-        $x("//div[contains(@id, 'example-modal-sizes-title-lg')]").shouldHave(text("Thanks for submitting the form"));
-        $x("//div[contains(@class, 'modal-body')]").shouldHave(text("Biba Fedotov"), text("Biba@mail.ru"), text("8800555353"));
-
+                .checkResultSuccessfull("Student Name", "Biba Fedotov")
+                .checkResultSuccessfull("Student Email", "Biba@mail.ru")
+                .checkResultSuccessfull("Gender", "Other")
+                .checkResultSuccessfull("Mobile", "8800555353")
+                .checkResultSuccessfull("Date of Birth", "20 April,2000")
+                .checkResultSuccessfull("Subjects", "Maths")
+                .checkResultSuccessfull("Hobbies", "Sports")
+                .checkResultSuccessfull("Picture", "image.jpg")
+                .checkResultSuccessfull("Address", "Moscow, Летниковская ул, д. 2")
+                .checkResultSuccessfull("State and City", "NCR Delhi");
 
     }
 
 
     @Test
-    void unSuccesfullRegistrationTest() {
+    void negativeRegistrationTest() {
         pageObject.openPage()
                 .submit()
-                .validationMatching("border-color", "rgb(220, 53, 69)");
+                .checkNegativeResult("border-color", "rgb(220, 53, 69)");
+    }
 
-
+    @Test
+    void minimalData() {
+        pageObject.openPage()
+                .setFirstName("Biba")
+                .setLastName("Fedotov")
+                .setGender()
+                .setUserNumber("88005553535")
+                .submit()
+                .checkResultMinData();
 
     }
 }
